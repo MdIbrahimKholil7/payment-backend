@@ -4,6 +4,7 @@ const cors = require('cors');
 const port =process.env.PORT || 5000
 require('dotenv').config()
 app.use(express.json())
+// cors url 
 app.use(cors({
     origin:['http://localhost:3000','https://payment-task-aa389.web.app/'],
     credentials:true
