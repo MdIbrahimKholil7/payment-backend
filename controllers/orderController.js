@@ -5,6 +5,7 @@ const { default: mongoose } = require('mongoose');
 const Order= new mongoose.model('order',orderSchema)
 const instance = new Razorpay({ key_id: process.env.RAZORPAY_API_KEY_ID, key_secret: process.env.RAZORPAY_KEY_SECRET })
 
+// create order 
 exports.order = async (req, res) => {
   const options = {
     amount: Number(req.body.amount * 100),
@@ -15,6 +16,7 @@ exports.order = async (req, res) => {
   res.send(order)
 }
 
+// payment verification 
 exports.paymentVerification = async (req, res) => {
   console.log('from body', req.body)
   try {
@@ -52,11 +54,24 @@ exports.paymentVerification = async (req, res) => {
   }
 }
 
+// get api key 
 exports.api_key = async (req, res) => {
   try {
     res.send({ key: process.env.RAZORPAY_API_KEY_ID })
     console.log(process.env.RAZORPAY_API_KEY_ID)
   } catch (error) {
+    console.log(error)
+  }
+}
+
+// get payment transaction 
+exports.getTransaction=async(req,res)=>{
+  try{
+    console.log(req.params)
+    const result=await Order.findOne().sort({email:req.params.email,_id:-1}).limit(1)
+    res.send(result)
+    console.log(result)
+  }catch(error){
     console.log(error)
   }
 }
