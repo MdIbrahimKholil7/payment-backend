@@ -1,5 +1,8 @@
 const Razorpay = require('razorpay');
 const crypto = require("crypto");
+const orderSchema=require('../model/orderSchema');
+const { default: mongoose } = require('mongoose');
+const Order= new mongoose.model('order',orderSchema)
 const instance = new Razorpay({ key_id: process.env.RAZORPAY_API_KEY_ID, key_secret: process.env.RAZORPAY_KEY_SECRET })
 
 exports.order = async (req, res) => {
@@ -27,8 +30,16 @@ exports.paymentVerification = async (req, res) => {
 
 
     if (expectedSignature === razorpay_signature) {
+      const order=new Order({
+        email:req.body.email,
+        transactionId:razorpay_payment_id
+      })
+      const result=await order.save()
+      console.group(result)
       res.send({
-        success: true
+        success: true,
+        razorpay_order_id,
+       
       })
     }else{
       res.send({

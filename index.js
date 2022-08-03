@@ -1,5 +1,6 @@
 const express = require('express');
 const app=express()
+const mongoose = require('mongoose');
 const cors = require('cors');
 const port =process.env.PORT || 5000
 require('dotenv').config()
@@ -10,6 +11,25 @@ app.use(cors({
     credentials:true,
     optionSuccessStatus:200,
 }))
+
+// connecting mongodb 
+const run = async () => {
+    try {
+        await mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.1cfd2.mongodb.net/payment?retryWrites=true&w=majority`,
+            {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+            }
+        ).then(()=>{
+            console.log('connection success')
+        })
+    } catch (error) {
+        console.log(error)
+    }
+
+}
+
+run()
 
 // payment api 
 const paymentApi=require('./api/paymentApi.js')
