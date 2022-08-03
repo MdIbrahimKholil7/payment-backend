@@ -6,10 +6,12 @@ require('dotenv').config()
 app.use(express.json())
 // cors url 
 app.use(cors({
-    origin:['http://localhost:3000','https://payment-task-aa389.web.app/'],
-    credentials:true
+    origin:['http://localhost:3000','https://payment-task-aa389.web.app'],
+    credentials:true,
+    optionSuccessStatus:200,
 }))
 
+// payment api 
 const paymentApi=require('./api/paymentApi.js')
 
 
